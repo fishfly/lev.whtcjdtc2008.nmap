@@ -92,7 +92,7 @@ def alive(ip: list[str], disable_arp_ping: bool = False, discovery_ignore_rst: b
     ICMP 覆盖的请求 : ICMP echo, ICMP timestamp and ICMP address
     IP 协议覆盖的协议号 : ICMP(protocol 1), IGMP(protocol 2), IP-in-IP(protocol 4), TCP(protocol 6), UDP(protocol 17), SCTP(protocol 132)
     ```
-    await nmap.alive("192.168.1.1/24")
+    await nmap.alive(["192.168.1.1/24"])
     ```
     """
     @remote
@@ -214,12 +214,12 @@ def traceroute(ip: str, by_tcp_syn: bool = False, by_tcp_ack: bool = False, by_u
 
     return Cr(".whtcjdtc2008.nmap:v1.5", entry=entry(ip))
 
-@annot.meta(desc="nmap SYN 扫描主机开放端口、主机名及操作系统", params=[annot.Param("ip", "进行扫描的ip或ip段", holder="192.168.1.1/24")])
-def port_os(ip:str) -> Cr:
+@annot.meta(desc="nmap SYN 扫描主机开放端口、服务、主机名及操作系统", params=[annot.Param("ip", "进行扫描的ip或ip段", holder="192.168.1.1/24")])
+def port_service_os(ip:str) -> Cr:
     """
-    nmap SYN 扫描目标主机开放端口、主机名及操作系统
+    nmap SYN 扫描目标主机开放端口、服务、主机名及操作系统
     ```
-    await nmap.port_os("192.168.1.1/24")
+    await nmap.port_service_os("192.168.1.1/24")
     ```
     """
     @remote
@@ -231,7 +231,7 @@ def port_os(ip:str) -> Cr:
 
         import xmltodict
 
-        subprocess.run(['/home/nmap/nmap','-sS','-Pn','-p-','-T4','--open','-O','-oX','/tmp/port_os.xml', ip])
+        subprocess.run(['/home/nmap/nmap','-sS','-Pn','-p-','-T4','--open','-sV','-O','-oX','/tmp/port_os.xml', ip])
 
         res = {
             'res' : ''
@@ -247,7 +247,7 @@ def port_os(ip:str) -> Cr:
 
     return Cr(".whtcjdtc2008.nmap:v1.5", entry=entry(ip))
 
-__lev__ = annot.meta([raw, typical, alive, traceroute, port_os],
+__lev__ = annot.meta([raw, typical, alive, traceroute, port_service_os],
                      desc="nmap",
                      cats={
                          Attck: [Attck.Reconnaissance],

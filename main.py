@@ -10,7 +10,7 @@ async def test_typical(ip:str):
     data = await res.get()
 
 async def test_port_os(ip:str):
-    res = await nmap.port_os(ip)
+    res = await nmap.port_service_os(ip)
     data = await res.get()
 
 async def test_raw():
@@ -28,6 +28,6 @@ if __name__ == "__main__":
     logger.setLevel(logging.DEBUG)
 
     # levrt.run(test_typical("lev.zone"))
-    # levrt.run(test_port_os("lev.zone"))
-    levrt.run(test_alive(["lev.zone", "mituan.zone"], True, False))
+    levrt.run(test_port_os("lev.zone"))
+    # levrt.run(test_alive(["lev.zone", "mituan.zone"], True, False))
     # levrt.run(test_raw())
